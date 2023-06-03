@@ -10,3 +10,12 @@
 <p>{{ serverCreationStatus }}</p>
 <app-server></app-server>
 <app-server></app-server>
+
+<label>
+  Enter you name:
+  <input [(ngModel)]="userName" />
+</label>
+<br />
+<button class="btn btn-primary" [disabled]="!userName" (click)="userName = ''">
+  Reset name
+</button>
