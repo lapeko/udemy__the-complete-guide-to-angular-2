@@ -1,1 +1,3 @@
-<div>Server {{ serverId }} is {{ status }}</div>
+<div [ngStyle]="{ backgroundColor: serverStatusColor }">
+  Server {{ serverId }} is {{ status }}
+</div>
