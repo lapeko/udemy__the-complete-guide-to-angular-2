@@ -5,4 +5,10 @@ import { Component } from '@angular/core';
   templateUrl: './servers.component.html',
   styleUrls: ['./servers.component.css'],
 })
-export class ServersComponent {}
+export class ServersComponent {
+  newServerAllowed = false;
+
+  constructor() {
+    setTimeout(() => (this.newServerAllowed = true), 2000);
+  }
+}
