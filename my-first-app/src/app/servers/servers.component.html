@@ -11,8 +11,7 @@
   New server was created: {{ serverName }}
 </p>
 <ng-template #noServer><p>No server was created</p></ng-template>
-<app-server></app-server>
-<app-server></app-server>
+<app-server *ngFor="let serverName of serverNames"></app-server>
 
 <label>
   Enter you name:
