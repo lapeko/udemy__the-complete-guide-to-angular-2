@@ -15,10 +15,6 @@ export class ServersComponent {
   }
 
   onServerCreated() {
-    this.serverCreationStatus = 'New server was created';
-  }
-
-  onInput(event: Event) {
-    this.serverName = (event.target as HTMLInputElement).value;
+    this.serverCreationStatus = `New server was created: ${this.serverName}`;
   }
 }
