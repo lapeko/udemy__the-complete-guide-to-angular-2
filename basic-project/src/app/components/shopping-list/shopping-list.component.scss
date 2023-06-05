@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.ingredient {
+  padding: 10px;
+  border: 1px solid lightgray;
+  &:not(:last-child) {
+    border-bottom: none;
+  }
+}

@@ -1,0 +1,10 @@
+:host {
+  display: flex;
+  .left {
+    width: calc(67% - 20px);
+    margin-right: 20px;
+  }
+  .right {
+    width: 33%;
+  }
+}

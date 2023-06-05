@@ -1,0 +1,60 @@
+$bgc: #82df48;
+$bgc-primary: #3886d5;
+$bgc-alarm: #ee2f2f;
+$bgc-warning: #ff9913;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container {
+  margin: 15px auto;
+  width: 960px;
+  max-width: calc(100vw - 30px);
+}
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: $bgc;
+  font-weight: bold;
+  color: #444444;
+  &:hover {
+    background-color: darken($bgc, 10%);
+  }
+  &:active {
+    background-color: lighten($bgc, 10%);
+  }
+}
+
+.btn-primary {
+  background-color: $bgc-primary;
+  &:hover {
+    background-color: darken($bgc-primary, 10%);
+  }
+  &:active {
+    background-color: lighten($bgc-primary, 10%);
+  }
+}
+
+.btn-warning {
+  background-color: $bgc-warning;
+  &:hover {
+    background-color: darken($bgc-warning, 10%);
+  }
+  &:active {
+    background-color: lighten($bgc-warning, 10%);
+  }
+}
+
+.btn-alarm {
+  background-color: $bgc-alarm;
+  &:hover {
+    background-color: darken($bgc-alarm, 10%);
+  }
+  &:active {
+    background-color: lighten($bgc-alarm, 10%);
+  }
+}
