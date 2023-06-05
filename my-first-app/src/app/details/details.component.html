@@ -1,0 +1,11 @@
+<button class="btn btn-success" (click)="onToggle()">
+  Toggle secret password
+</button>
+<p *ngIf="!secretPasswordShown">Secret password = tuna</p>
+<div
+  *ngFor="let log of logs; let idx = index"
+  [ngStyle]="idx > 3 && { backgroundColor: 'blue' }"
+  [ngClass]="{ white: idx > 3 }"
+>
+  {{ log }}
+</div>
