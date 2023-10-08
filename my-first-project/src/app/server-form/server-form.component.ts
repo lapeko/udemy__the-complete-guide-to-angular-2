@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild} from '@angular/core';
 import {Server} from "../common/server.model";
 
 @Component({
@@ -11,10 +11,13 @@ export class ServerFormComponent {
   @ViewChild('name') nameRef: ElementRef;
   @ViewChild('content') contentRef: ElementRef;
 
+  constructor(private renderer: Renderer2) {
+  }
+
   addServer(content: string, isBlueprint = false) {
     const name = this.nameRef.nativeElement.value;
     this.onAddServer.emit({name, content, type: isBlueprint ? "blueprint" : "server"})
-    this.nameRef.nativeElement.value = "";
-    this.contentRef.nativeElement.value = "";
+    this.renderer.setProperty(this.nameRef.nativeElement, 'value', "");
+    this.renderer.setProperty(this.contentRef.nativeElement, 'value', "");
   }
 }
