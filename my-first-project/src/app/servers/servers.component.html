@@ -11,5 +11,6 @@
   <p>{{serverCreationStatus}}</p>
 </ng-template>
 
-<app-server></app-server>
-<app-server></app-server>
+<ng-container *ngFor="let server of servers">
+  <app-server></app-server>
+</ng-container>

@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./servers.component.css']
 })
 export class ServersComponent {
+  servers: string[] = [];
   serverAllowed = false;
   serverCreationStatus = "No server was created!";
   serverName = "";
@@ -16,7 +17,9 @@ export class ServersComponent {
   }
 
   onServerCreate() {
+    this.servers.push(this.serverName);
     this.serverCreated = true;
-    this.serverCreationStatus = `Server with name ${this.serverName} was created!`;
+    this.serverCreationStatus = `Server with name "${this.serverName}" was created!`;
+    this.serverName = "";
   }
 }
