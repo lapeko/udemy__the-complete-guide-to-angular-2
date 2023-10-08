@@ -1,1 +1,7 @@
-<p>recipe-item works!</p>
+<div class="recipe" [ngClass]="{'mb-3': !isLast}">
+  <div>
+    <h5>{{recipe.name}}</h5>
+    <p>{{recipe.desc}}</p>
+  </div>
+  <img [src]="recipe.imagePath" class="img" [alt]="recipe.name">
+</div>
