@@ -1,0 +1,15 @@
+<input class="form-control mb-3" [(ngModel)]="serverName">
+
+<button
+  class="btn btn-primary"
+  [disabled]="!serverAllowed"
+  (click)="onServerCreate()"
+>Add new server</button>
+
+<p *ngIf="serverCreated; else noServer">{{serverCreationStatus}}</p>
+<ng-template #noServer>
+  <p>{{serverCreationStatus}}</p>
+</ng-template>
+
+<app-server></app-server>
+<app-server></app-server>
