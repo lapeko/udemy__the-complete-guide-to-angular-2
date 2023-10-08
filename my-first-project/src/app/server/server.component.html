@@ -1,6 +1,9 @@
-<div
-  [ngStyle]="{color: getColor()}"
-  [ngClass]="{online: serverStatus === 'online'}"
->
-  Server with id: {{serverId}} is {{serverStatus}}
+<div class="card">
+  <div class="card-body">
+    <h5
+      class="card-title"
+      [ngStyle]="{color: server.type === 'blueprint' ? 'blue' : 'black'}"
+    >{{server.name}}</h5>
+    <p class="card-text">{{server.content}}</p>
+  </div>
 </div>

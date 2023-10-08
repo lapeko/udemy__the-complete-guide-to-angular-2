@@ -1,4 +1,5 @@
 <div class="container">
   <h2 class="mb-3">App</h2>
-  <app-servers></app-servers>
+  <app-server-form (onAddServer)="addServer($event)"></app-server-form>
+  <app-server *ngFor="let server of servers" [server]="server"></app-server>
 </div>

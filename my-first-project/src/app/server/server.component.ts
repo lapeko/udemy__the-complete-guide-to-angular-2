@@ -1,19 +1,11 @@
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
+import {Server} from "../common/server.model";
 
 @Component({
   selector: "app-server",
   templateUrl: "./server.component.html",
-  styles: [`
-    .online {
-      text-decoration: underline;
-    }
-  `]
+  styleUrls: ["./server.component.css"]
 })
 export class ServerComponent {
-  serverId = 10;
-  serverStatus: "offline" | "online" = Math.random() < 0.5 ? "offline" : "online";
-
-  getColor() {
-    return this.serverStatus === "offline" ? "red" : "green";
-  }
+  @Input() server: Server;
 }
