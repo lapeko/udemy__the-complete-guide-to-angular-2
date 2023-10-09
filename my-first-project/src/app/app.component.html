@@ -1,5 +1,10 @@
 <div class="container">
   <h2 class="mb-3">App</h2>
   <app-server-form (onAddServer)="addServer($event)"></app-server-form>
-  <app-server *ngFor="let server of servers" [server]="server"></app-server>
+  <app-server *ngFor="let server of servers" [server]="server">
+    <h5
+      class="card-title"
+      [ngStyle]="{color: server.type === 'blueprint' ? 'blue' : 'black'}"
+    >{{server.name}}</h5>
+  </app-server>
 </div>
