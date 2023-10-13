@@ -4,4 +4,5 @@
   *ngFor="let recipe of recepies; let isLast = last"
   [recipe]="recipe"
   [isLast]="isLast"
+  (click)="onRecipeClick(recipe)"
 ></app-recipe-item>

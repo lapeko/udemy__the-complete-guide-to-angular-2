@@ -1,4 +1,6 @@
-<h3 class="mb-3">Recipe name</h3>
+<h3 class="mb-3">{{activeRecipe.name}}</h3>
+
+<img style="max-width: 200px" [src]="activeRecipe.imagePath" [alt]="activeRecipe.name">
 
 <div class="btn-group mb-3">
   <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -13,5 +15,5 @@
   </ul>
 </div>
 
-<p>Description</p>
+<p>Description: {{activeRecipe.desc}}</p>
 <p>Ingredients</p>

@@ -2,15 +2,15 @@
   <div class="row mb-3">
     <div class="col-md-4 form-group">
       <label for="name">Name</label>
-      <input type="text" id="name" class="form-control">
+      <input type="text" id="name" class="form-control" #itemName>
     </div>
     <div class="col-md-2 form-group">
       <label for="amount">Amount</label>
-      <input type="number" id="amount" class="form-control">
+      <input type="number" id="amount" class="form-control" #itemAmount>
     </div>
   </div>
   <div>
-    <button class="btn btn-success me-1">Add</button>
+    <button class="btn btn-success me-1" (click)="onAddShoppingItem(+itemAmount.value)">Add</button>
     <button class="btn btn-warning me-1">Clear</button>
     <button class="btn btn-danger">Delete</button>
   </div>

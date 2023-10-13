@@ -1,8 +1,9 @@
 <div class="row mb-3">
   <div class="col-md-5">
-    <app-recipe-list></app-recipe-list>
+    <app-recipe-list (recipeClick)="onRecipeClick($event)"></app-recipe-list>
   </div>
   <div class="col-md-7">
-    <app-recipe-detail></app-recipe-detail>
+    <app-recipe-detail *ngIf="activeRecipe; else noActiveRecipe" [activeRecipe]="activeRecipe"></app-recipe-detail>
+    <ng-template #noActiveRecipe><p>Choose any recipe</p></ng-template>
   </div>
 </div>
