@@ -11,6 +11,5 @@ export class AppComponent {
 
   onNavigate(pageName: PageName) {
     this.activePage = pageName;
-    console.log(this.activePage);
   }
 }

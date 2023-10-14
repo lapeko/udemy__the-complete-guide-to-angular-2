@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Recipe} from "../recipe-list/recipe.model";
+import {RecipesService} from "../recipes.service";
 
 @Component({
   selector: 'app-recipe-detail',
@@ -7,5 +8,9 @@ import {Recipe} from "../recipe-list/recipe.model";
   styleUrls: ['./recipe-detail.component.scss']
 })
 export class RecipeDetailComponent {
-  @Input() activeRecipe?: Recipe;
+  activeRecipe: Recipe;
+
+  constructor(private recipesService: RecipesService) {
+    this.recipesService.activeRecipeEmitter.subscribe(recipe => this.activeRecipe = recipe);
+  }
 }

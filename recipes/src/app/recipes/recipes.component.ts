@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
-import {Recipe} from "./recipe-list/recipe.model";
+import {RecipesService} from "./recipes.service";
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.scss']
+  styleUrls: ['./recipes.component.scss'],
+  providers: [RecipesService],
 })
 export class RecipesComponent {
-  activeRecipe?: Recipe = null;
-
-  onRecipeClick(recipe: Recipe) {
-    this.activeRecipe = recipe;
-  }
 }
