@@ -21,24 +21,26 @@ export class DropdownDirective implements AfterViewInit {
   ) {
   }
 
-  @HostListener('click') onClick() {
-    this.toggleClass();
+  @HostListener('document:click', ['$event']) onClick(event: Event) {
+    this.el.nativeElement.contains(event.target)
+      ? this.toggleClass()
+      : this.hide();
   }
 
   toggleClass() {
     this.isOpen
       ? this.hide()
       : this.show();
-
-    this.isOpen = !this.isOpen;
   }
 
   private show() {
     classes.forEach(className => this.renderer.addClass(this.ulElement, className))
+    this.isOpen = true;
   }
 
   private hide() {
     classes.forEach(className => this.renderer.removeClass(this.ulElement, className))
+    this.isOpen = false;
   }
 
   ngAfterViewInit(): void {
