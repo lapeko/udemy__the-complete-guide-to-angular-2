@@ -13,15 +13,18 @@
       Manage recipe
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
-      <li><a class="dropdown-item" href="#">Action</a></li>
-      <li><a class="dropdown-item" href="#">Another action</a></li>
-      <li><a class="dropdown-item" href="#">Something else here</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="#">Separated link</a></li>
+      <li class="dropdown-item" (click)="addIngredientsToShoppingList()">To shopping list</li>
+      <li class="dropdown-item">Edit recipe</li>
+      <li class="dropdown-item">Delete recipe</li>
     </ul>
   </div>
 
   <p>Description: {{activeRecipe.desc}}</p>
-  <p>Ingredients</p>
+  <ul class="list-group">
+    <li
+      *ngFor="let ingredient of activeRecipe.ingredients"
+      class="list-group-item"
+    >{{ingredient.name}} - {{ingredient.amount}}</li>
+  </ul>
 </ng-container>
 <ng-template #noActiveRecipe><p>Choose any recipe</p></ng-template>
