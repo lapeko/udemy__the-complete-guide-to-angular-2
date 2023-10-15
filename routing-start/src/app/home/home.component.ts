@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from "../auth.service";
 
 @Component({
   selector: 'app-home',
@@ -7,5 +8,15 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
-  constructor() { }
+  constructor(
+    private authService: AuthService
+  ) { }
+
+  login() {
+    this.authService.logIn();
+  }
+
+  logout() {
+    this.authService.logOut();
+  }
 }
