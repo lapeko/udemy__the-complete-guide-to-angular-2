@@ -12,6 +12,7 @@ export class EditServerComponent implements OnInit {
   server: {id: number, name: string, status: string};
   serverName = '';
   serverStatus = '';
+  editBtnDisabled = true;
 
   constructor(
     private serversService: ServersService,
@@ -23,6 +24,7 @@ export class EditServerComponent implements OnInit {
     this.serverName = this.server.name;
     this.serverStatus = this.server.status;
     const {queryParams, fragment} = this.activatedRoute.snapshot;
+    this.editBtnDisabled = queryParams['allowEdit'] !== 'true';
   }
 
   onUpdateServer() {
