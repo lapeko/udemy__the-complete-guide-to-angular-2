@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import { ServersService } from '../servers.service';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-server',
@@ -11,21 +10,21 @@ import {Subscription} from "rxjs";
 })
 export class ServerComponent implements OnInit, OnDestroy {
   server: {id: number, name: string, status: string};
-  private paramsSubscription: Subscription;
+  private subscription = new Subscription();
 
   constructor(
-    private serversService: ServersService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.paramsSubscription = this.activatedRoute.params
-      .subscribe(params => this.server = this.serversService.getServer(+params.id));
+    const subscription = this.activatedRoute.data
+      .subscribe(data => this.server = data.server);
+    this.subscription.add(subscription);
   }
 
   ngOnDestroy() {
-    this.paramsSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   editServer() {

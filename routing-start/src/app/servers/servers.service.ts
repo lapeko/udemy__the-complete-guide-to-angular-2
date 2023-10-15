@@ -1,5 +1,11 @@
+export interface Server {
+  id: number;
+  name: string;
+  status: string;
+}
+
 export class ServersService {
-  private servers = [
+  private servers: Server[] = [
     {
       id: 1,
       name: 'Productionserver',
@@ -17,17 +23,16 @@ export class ServersService {
     }
   ];
 
-  getServers() {
+  getServers(): Server[] {
     return this.servers;
   }
 
-  getServer(id: number) {
-    const server = this.servers.find(
+  getServer(id: number): Server {
+    return this.servers.find(
       (s) => {
         return s.id === id;
       }
     );
-    return server;
   }
 
   updateServer(id: number, serverInfo: {name: string, status: string}) {
