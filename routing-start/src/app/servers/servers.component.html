@@ -3,7 +3,7 @@
     <div class="list-group">
       <a
         *ngFor="let server of servers"
-        [routerLink]="['/servers', 1, 'edit']"
+        [routerLink]="['/servers', server.id]"
         [queryParams]="{allowEdit: true}"
         fragment="some-fragment"
         class="list-group-item"
@@ -13,12 +13,9 @@
     </div>
   </div>
   <div class="col-xs-12 col-sm-4">
-    <button class="btn btn-primary" (click)="visitHomeRelatively()">
-      Visit home programmatically by relative path
-    </button>
     <app-edit-server></app-edit-server>
     <hr>
-    <app-server></app-server>
+<!--    <app-server></app-server>-->
   </div>
 </div>
 

@@ -23,7 +23,6 @@ export class EditServerComponent implements OnInit {
     this.serverName = this.server.name;
     this.serverStatus = this.server.status;
     const {queryParams, fragment} = this.activatedRoute.snapshot;
-    console.log({queryParams, fragment});
   }
 
   onUpdateServer() {

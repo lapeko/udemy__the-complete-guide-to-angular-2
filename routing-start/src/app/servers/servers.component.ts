@@ -19,9 +19,4 @@ export class ServersComponent implements OnInit {
   ngOnInit() {
     this.servers = this.serversService.getServers();
   }
-
-  visitHomeRelatively() {
-    this.router
-      .navigate(["servers"], {relativeTo: this.activeRoute});
-  }
 }
