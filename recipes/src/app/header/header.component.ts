@@ -1,5 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {PageName} from "../shared/types";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +6,4 @@ import {PageName} from "../shared/types";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  @Output() navigate = new EventEmitter<PageName>();
-
-  onNavigationClick(pageName: PageName) {
-    this.navigate.emit(pageName);
-  }
 }

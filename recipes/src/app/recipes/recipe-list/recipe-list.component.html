@@ -1,8 +1,8 @@
 <button class="btn btn-success mb-3">New recipe</button>
 
 <app-recipe-item
-  *ngFor="let recipe of recipes; let isLast = last"
+  *ngFor="let recipe of recipes; let isLast = last; let index = index"
   [recipe]="recipe"
   [isLast]="isLast"
-  (click)="onRecipeClick(recipe)"
+  [routerLink]="[index + 1]"
 ></app-recipe-item>
