@@ -5,8 +5,13 @@
   padding: 1rem;
   border: 1px solid gray;
   border-radius: .5rem;
+  opacity: .65;
 
   .img {
     width: 25%;
+  }
+
+  &.active {
+    opacity: 1;
   }
 }
