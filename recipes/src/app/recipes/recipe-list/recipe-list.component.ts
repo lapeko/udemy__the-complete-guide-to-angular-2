@@ -8,7 +8,6 @@ import {RecipesService} from "../recipes.service";
   styleUrls: ['./recipe-list.component.scss'],
 })
 export class RecipeListComponent implements OnInit {
-  @Output() recipeClick = new EventEmitter<Recipe>();
   recipes: Recipe[] = [];
 
   constructor(private recipesService: RecipesService) {
