@@ -2,6 +2,7 @@
 
 <app-recipe-item
   *ngFor="let recipe of recipes; let isLast = last; let index = index"
+  style="cursor: pointer"
   [recipe]="recipe"
   [isLast]="isLast"
   [routerLink]="[index + 1]"
