@@ -31,6 +31,7 @@ export class AppComponent {
 
   submit() {
     console.log(this.form);
+    this.form.resetForm();
   }
 }
 
