@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 
 @Component({
@@ -7,11 +7,16 @@ import {NgForm} from "@angular/forms";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  @ViewChild('form') form: NgForm;
+  defaultSelectValue = "pet";
+
   suggestUserName() {
     const suggestedName = 'Superuser';
   }
 
-  submit(form: NgForm) {
-    console.log(form.value);
+  submit() {
+    console.log(this.form);
   }
 }
+
+// TODO Disable button if invalid.  Mark all inputs red if they are invalid
