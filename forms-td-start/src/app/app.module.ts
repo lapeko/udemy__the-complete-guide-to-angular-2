@@ -4,16 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
+import { TdChallengeComponent } from './td-challenge/td-challenge.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TdChallengeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [TdChallengeComponent]
 })
 export class AppModule { }
