@@ -9,9 +9,24 @@ import {NgForm} from "@angular/forms";
 export class AppComponent {
   @ViewChild('form') form: NgForm;
   defaultSelectValue = "pet";
+  answer = "";
+  sexArr = ["male", "female"];
 
   suggestUserName() {
-    const suggestedName = 'Superuser';
+    // this.form.setValue({
+    //   userGroup: {
+    //     username: "username",
+    //     email: "email@mail.com",
+    //   },
+    //   questionAnswer: "aiug sdakjhlsd dsfkjlsdf fdslkj",
+    //   secret: "pet",
+    //   sex: "male",
+    // })
+    this.form.form.patchValue({
+      userGroup: {
+        username: "username",
+      },
+    })
   }
 
   submit() {
