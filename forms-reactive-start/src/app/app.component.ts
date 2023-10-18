@@ -7,11 +7,11 @@ import {FormArray, FormBuilder, FormControl, ValidationErrors, Validators} from 
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  forbiddenUsers = ["User1", 'Thief'];
+  takenUsers = ["User1", 'Thief'];
   genders = ['male', 'female'];
   form = this.fb.group({
     userGroup: this.fb.group({
-      userName: this.fb.control("", [Validators.required, this.userForbidden.bind(this)]),
+      userName: this.fb.control("", [Validators.required, this.userTaken.bind(this)]),
       email: this.fb.control("", [Validators.email, Validators.required]),
     }),
     gender: this.fb.control(this.genders[0]),
@@ -33,7 +33,7 @@ export class AppComponent {
     console.log(this.form.value);
   }
 
-  userForbidden(control: FormControl): ValidationErrors | null {
-    return this.forbiddenUsers.includes(control.value) ? {forbiddenUser: true} : null;
+  userTaken(control: FormControl): ValidationErrors | null {
+    return this.takenUsers.includes(control.value) ? {takenUser: true} : null;
   }
 }

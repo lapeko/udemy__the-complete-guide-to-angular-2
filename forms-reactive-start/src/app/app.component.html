@@ -11,7 +11,10 @@
               id="username"
               class="form-control">
           </div>
-          <p *ngIf="form.get('userGroup.userName').invalid && form.get('userGroup.userName').touched">Please, fill your userName</p>
+          <ng-container *ngIf="form.get('userGroup.userName').invalid && form.get('userGroup.userName').touched">
+            <p *ngIf="form.get('userGroup.userName').errors['required']">Please, fill your userName</p>
+            <p *ngIf="form.get('userGroup.userName').errors['takenUser']">This userName has already been taken</p>
+          </ng-container>
           <div class="form-group">
             <label for="email">email</label>
             <input
