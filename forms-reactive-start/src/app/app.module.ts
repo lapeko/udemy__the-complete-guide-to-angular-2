@@ -1,19 +1,18 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
-
-import { AppComponent } from './app.component';
+import { ReactiveFormChallengeComponent } from './reactive-form-challenge/reactive-form-challenge.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    ReactiveFormChallengeComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ReactiveFormChallengeComponent]
 })
 export class AppModule { }
