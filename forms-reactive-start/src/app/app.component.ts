@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-root',
@@ -9,12 +9,23 @@ import {FormBuilder, FormControl, Validators} from "@angular/forms";
 export class AppComponent {
   genders = ['male', 'female'];
   form = this.fb.group({
-    userName: new FormControl("", Validators.required),
-    email: new FormControl("", [Validators.email, Validators.required]),
-    gender: new FormControl(this.genders[0])
+    userGroup: this.fb.group({
+      userName: this.fb.control("", Validators.required),
+      email: this.fb.control("", [Validators.email, Validators.required]),
+    }),
+    gender: this.fb.control(this.genders[0]),
+    hobbies: this.fb.array([]),
   });
 
   constructor(private fb: FormBuilder) {
+  }
+
+  get hobbies() {
+    return (<FormArray>this.form.get('hobbies')).controls;
+  }
+
+  addHobby() {
+    (<FormArray>this.form.get('hobbies')).push(this.fb.control("", Validators.required));
   }
 
   onSubmit() {
