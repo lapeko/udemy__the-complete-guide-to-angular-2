@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, ValidationErrors, Validators} from "@angular/forms";
+import {Observable, timer} from "rxjs";
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,7 @@ export class AppComponent {
   form = this.fb.group({
     userGroup: this.fb.group({
       userName: this.fb.control("", [Validators.required, this.userTaken.bind(this)]),
-      email: this.fb.control("", [Validators.email, Validators.required]),
+      email: this.fb.control("", [Validators.email, Validators.required], this.emailValidator),
     }),
     gender: this.fb.control(this.genders[0]),
     hobbies: this.fb.array([]),
@@ -35,5 +37,11 @@ export class AppComponent {
 
   userTaken(control: FormControl): ValidationErrors | null {
     return this.takenUsers.includes(control.value) ? {takenUser: true} : null;
+  }
+
+  emailValidator(control: FormControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    return timer(1500).pipe(
+      map(timeout => control.value === "test@test" ? {emailTaken: true} : null)
+    )
   }
 }

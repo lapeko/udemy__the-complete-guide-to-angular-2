@@ -23,7 +23,12 @@
               id="email"
               class="form-control">
           </div>
-          <p *ngIf="form.get('userGroup.email').invalid && form.get('userGroup.email').touched">Please, fill your email</p>
+
+          <ng-container *ngIf="form.get('userGroup.email').invalid && form.get('userGroup.email').touched">z
+            <p *ngIf="form.get('userGroup.email').errors['required']">Please, fill your email</p>
+            <p *ngIf="form.get('userGroup.email').errors['email']">Please, provide correct email</p>
+            <p *ngIf="form.get('userGroup.email').errors['emailTaken']">This email has already been taken</p>
+          </ng-container>
         </ng-container>
         <div class="radio" *ngFor="let gender of genders">
           <label>
