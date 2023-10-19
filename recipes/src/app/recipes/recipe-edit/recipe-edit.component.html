@@ -1,1 +1,40 @@
-<p>recipe-edit works!</p>
+<div class="container">
+  <form [formGroup]="recipeForm">
+    <div class="row">
+      <div class="col-md-3 d-flex mb-3">
+        <button class="btn btn-success me-3">Save</button>
+        <button class="btn btn-danger">Cancel</button>
+      </div>
+      <div class="form-group mb-3">
+        <label for="name">Name</label>
+        <input formControlName="name" type="text" id="name" class="form-control">
+      </div>
+      <div class="form-group mb-3">
+        <label for="imageSrc">Image url</label>
+        <input formControlName="imageSrc" type="text" id="imageSrc" class="form-control">
+      </div>
+      <div class="form-group mb-3">
+        <label for="description">Description</label>
+        <textarea formControlName="description" id="description" class="form-control"></textarea>
+      </div>
+      <div formArrayName="ingredients" class="mb-3">
+        <div *ngFor="let _ of ingredients.value; let i = index" [formGroupName]="i" class="row form-group mb-1">
+          <div class="col-md-7">
+            <input formControlName="name" type="text" class="form-control me-3" placeholder="Ingredient name">
+          </div>
+          <div class="col-md-3">
+            <input formControlName="amount" type="number" class="form-control" placeholder="Amount">
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-danger" (click)="deleteIngredient(i)">X</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-success" (click)="addIngredient()">Add ingredient</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
