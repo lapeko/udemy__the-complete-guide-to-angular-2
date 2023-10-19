@@ -11,10 +11,10 @@ import {NotFoundComponent} from "./not-found/not-found.component";
 const routes: Route[] = [
   {path: "", redirectTo: "/recipes", pathMatch: "full"},
   {path: "recipes", component: RecipesComponent, children: [
-      {path: "", component: RecipeStartComponent},
-      {path: "new", component: RecipeEditComponent},
-      {path: ":id", component: RecipeDetailComponent},
-      {path: ":id/edit", component: RecipeEditComponent},
+    {path: "", component: RecipeStartComponent},
+    {path: "new", component: RecipeEditComponent},
+    {path: ":id", component: RecipeDetailComponent},
+    {path: ":id/edit", component: RecipeEditComponent},
   ]},
   {path: "shopping-list", component: ShoppingListComponent},
   {path: "not-found", component: NotFoundComponent},

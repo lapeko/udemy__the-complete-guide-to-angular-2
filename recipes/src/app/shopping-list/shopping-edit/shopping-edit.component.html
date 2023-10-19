@@ -27,8 +27,11 @@
     </form>
   </div>
   <div>
-    <button class="btn btn-success me-1" (click)="addShoppingItem()" [disabled]="!shoppingItemForm.valid">Add</button>
-    <button class="btn btn-warning me-1">Clear</button>
-    <button class="btn btn-danger">Delete</button>
+    <button *ngIf="!idEditMode; else update" class="btn btn-success me-1" (click)="addShoppingItem()" [disabled]="!shoppingItemForm.valid">Add</button>
+    <ng-template #update>
+      <button class="btn btn-primary me-1" (click)="updateShoppingItem()" [disabled]="!shoppingItemForm.valid">Update</button>
+    </ng-template>
+    <button class="btn btn-warning me-1" (click)="clearShoppingItem()">Clear</button>
+    <button *ngIf="idEditMode" class="btn btn-danger" (click)="deleteShoppingItem()">Delete</button>
   </div>
 </div>
