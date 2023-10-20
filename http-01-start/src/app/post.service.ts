@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Post, PostsBEResponse} from "./post.model";
 import {API_URL} from "./consts";
 import {catchError, map} from "rxjs/operators";
-import {of, Subject} from "rxjs";
+import {of, Subject, throwError} from "rxjs";
 
 const SERVICE_URL = `${API_URL}/posts.json`;
 
@@ -19,7 +19,7 @@ export class PostService {
     return this.http.post<{name: string}>(SERVICE_URL, post)
       .pipe(catchError(err => {
         this.errorMessage$.next(err.message ?? "An error occurred");
-        return of({name: ""});
+        return throwError(() => err);
       }));
   }
 
@@ -41,7 +41,7 @@ export class PostService {
     return this.http.delete(SERVICE_URL)
       .pipe(catchError(err => {
         this.errorMessage$.next(err.message ?? "An error occurred");
-        throw(err);
+        return throwError(() => err);
       }));
   }
 }

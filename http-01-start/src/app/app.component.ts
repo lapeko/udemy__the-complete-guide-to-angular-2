@@ -52,6 +52,10 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
+  hideErrorAlert() {
+    this.errorMessage = "";
+  }
+
   private fetchPosts() {
     this.isLoading = true;
     this.postService.getPosts()
