@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {API_URL} from "./consts";
-import {map, Observable, of, tap} from "rxjs";
-import {Post, PostsBEResponse} from "./post.model";
+import {Post} from "./post.model";
+import {PostService} from "./post.service";
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -13,20 +12,18 @@ export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
   isLoading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private postService: PostService) {}
 
   ngOnInit() {
-    this.fetchPosts()
-      .subscribe(posts => this.loadedPosts = posts);
+    this.fetchPosts();
   }
 
   onCreatePost(postData: { title: string; content: string }) {
-    this.http.post(`${API_URL}/posts.json`, postData).subscribe(console.log);
+    this.postService.postPost(postData).subscribe(console.log);
   }
 
   onFetchPosts() {
     this.fetchPosts()
-      .subscribe(posts => this.loadedPosts = posts);
   }
 
   onClearPosts() {
@@ -35,11 +32,8 @@ export class AppComponent implements OnInit {
 
   private fetchPosts() {
     this.isLoading = true;
-    return this.http.get<PostsBEResponse>(`${API_URL}/posts.json`)
-      .pipe(
-        map(response => Object.entries(response)),
-        map(keyValueArray => keyValueArray.map(([key, value]) => ({id: key, ...value}) as Post)),
-        tap(() => this.isLoading = false)
-      )
+    this.postService.getPosts()
+      .pipe(tap(() => this.isLoading = false))
+      .subscribe(posts => this.loadedPosts = posts);
   }
 }
