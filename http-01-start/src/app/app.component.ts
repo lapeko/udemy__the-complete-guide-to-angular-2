@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {API_URL} from "./consts";
+import {map, tap} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -11,18 +13,28 @@ export class AppComponent implements OnInit {
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.fetchPosts();
+  }
 
   onCreatePost(postData: { title: string; content: string }) {
-    // Send Http request
-    console.log(postData);
+    this.http.post(`${API_URL}/posts.json`, postData).subscribe(console.log);
   }
 
   onFetchPosts() {
-    // Send Http request
+    this.fetchPosts();
   }
 
   onClearPosts() {
     // Send Http request
+  }
+
+  private fetchPosts() {
+    this.http.get(`${API_URL}/posts.json`)
+      .pipe(
+        map(response => Object.entries(response)),
+        map(keyValueArray => keyValueArray.map(([key, value]) => ({id: key, ...value})))
+      )
+      .subscribe(console.log);
   }
 }
