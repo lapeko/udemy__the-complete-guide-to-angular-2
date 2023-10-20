@@ -57,8 +57,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   addIngredient() {
     this.ingredients.push(this.fb.group({
-      name: this.fb.control("new"),
-      amount: this.fb.control(6),
+      name: this.fb.control(""),
+      amount: this.fb.control(null),
     }));
   }
 
