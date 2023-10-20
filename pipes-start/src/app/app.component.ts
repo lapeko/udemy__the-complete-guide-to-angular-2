@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
 
+export interface Server {
+  instanceType: string;
+  name: string;
+  status: string;
+  started: Date;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  servers = [
+  filter = "";
+  servers: Server[] = [
     {
       instanceType: 'medium',
       name: 'Production Server',
@@ -38,5 +46,14 @@ export class AppComponent {
       'list-group-item-warning': server.status === 'offline',
       'list-group-item-danger': server.status === 'critical'
     };
+  }
+
+  addNewServer() {
+    this.servers.push({
+      instanceType: 'medium',
+        name: 'User Database',
+      status: 'offline',
+      started: new Date(15, 1, 2017)
+    });
   }
 }
