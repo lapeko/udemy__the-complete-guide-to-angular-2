@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {API_URL} from "./consts";
-import {map} from "rxjs";
+import {map, Observable, of, tap} from "rxjs";
 import {Post, PostsBEResponse} from "./post.model";
 
 @Component({
@@ -10,12 +10,14 @@ import {Post, PostsBEResponse} from "./post.model";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  loadedPosts = [];
+  loadedPosts: Post[] = [];
+  isLoading = false;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.fetchPosts();
+    this.fetchPosts()
+      .subscribe(posts => this.loadedPosts = posts);
   }
 
   onCreatePost(postData: { title: string; content: string }) {
@@ -23,7 +25,8 @@ export class AppComponent implements OnInit {
   }
 
   onFetchPosts() {
-    this.fetchPosts();
+    this.fetchPosts()
+      .subscribe(posts => this.loadedPosts = posts);
   }
 
   onClearPosts() {
@@ -31,11 +34,12 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get<PostsBEResponse>(`${API_URL}/posts.json`)
+    this.isLoading = true;
+    return this.http.get<PostsBEResponse>(`${API_URL}/posts.json`)
       .pipe(
         map(response => Object.entries(response)),
-        map(keyValueArray => keyValueArray.map(([key, value]) => ({id: key, ...value}) as Post))
+        map(keyValueArray => keyValueArray.map(([key, value]) => ({id: key, ...value}) as Post)),
+        tap(() => this.isLoading = false)
       )
-      .subscribe(console.log);
   }
 }
