@@ -2,6 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {Recipe} from "../../shared/recipe.model";
+import {RecipesService} from "../recipes.service";
 
 @Component({
   selector: 'app-recipe-edit',
@@ -9,11 +11,12 @@ import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
   styleUrls: ['./recipe-edit.component.scss']
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
-  isEdit = false;
-  private destroy$ = new Subject<void>();
+  recipeInEdit: Recipe;
   recipeForm: FormGroup;
+  private destroy$ = new Subject<void>();
 
   constructor(
+    private recipesService: RecipesService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
   ) {
@@ -26,7 +29,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.params
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({id}) => this.isEdit = !!id);
+      .subscribe(({id}) => {
+        this.recipeInEdit = id ? this.recipesService.recipes[id - 1] : null;
+      });
     this.initForm();
   }
 
@@ -36,16 +41,17 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
+    const ingredients = this.recipeInEdit?.ingredients
+      ? this.recipeInEdit.ingredients.map(ingredient => this.fb.group({
+        name: this.fb.control(ingredient.name),
+        amount: this.fb.control(ingredient.amount),
+      }))
+      : [];
     this.recipeForm = this.fb.group({
-      name: this.fb.control("1"),
-      imageSrc: this.fb.control("2"),
-      description: this.fb.control("3"),
-      ingredients: this.fb.array([
-        this.fb.group({
-          name: this.fb.control("4"),
-          amount: this.fb.control(5),
-        })
-      ]),
+      name: this.fb.control(this.recipeInEdit?.name ?? ""),
+      imagePath: this.fb.control(this.recipeInEdit?.imagePath),
+      desc: this.fb.control(this.recipeInEdit?.desc),
+      ingredients: this.fb.array(ingredients),
     });
   }
 

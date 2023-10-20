@@ -11,11 +11,11 @@
       </div>
       <div class="form-group mb-3">
         <label for="imageSrc">Image url</label>
-        <input formControlName="imageSrc" type="text" id="imageSrc" class="form-control">
+        <input formControlName="imagePath" type="text" id="imageSrc" class="form-control">
       </div>
       <div class="form-group mb-3">
         <label for="description">Description</label>
-        <textarea formControlName="description" id="description" class="form-control"></textarea>
+        <textarea formControlName="desc" id="description" class="form-control"></textarea>
       </div>
       <div formArrayName="ingredients" class="mb-3">
         <div *ngFor="let _ of ingredients.value; let i = index" [formGroupName]="i" class="row form-group mb-1">
