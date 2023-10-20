@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {API_URL} from "./consts";
-import {map, tap} from "rxjs";
+import {map} from "rxjs";
+import {Post, PostsBEResponse} from "./post.model";
 
 @Component({
   selector: 'app-root',
@@ -30,10 +31,10 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get(`${API_URL}/posts.json`)
+    this.http.get<PostsBEResponse>(`${API_URL}/posts.json`)
       .pipe(
         map(response => Object.entries(response)),
-        map(keyValueArray => keyValueArray.map(([key, value]) => ({id: key, ...value})))
+        map(keyValueArray => keyValueArray.map(([key, value]) => ({id: key, ...value}) as Post))
       )
       .subscribe(console.log);
   }
