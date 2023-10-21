@@ -36,15 +36,13 @@ export class AuthComponent {
 
   private signUp() {
     this.isLoading = true;
+    this.errorMessage = "";
     const {email, password} = this.form.value;
     this.authService.signUp(email, password)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: res => console.log(res),
-        error: error => {
-          const newErrorMessage = `Code: ${error.error.error.code}. Message: ${error.error.error.message}`;
-          this.errorMessage = newErrorMessage ?? "An error occurred"
-        },
+        error: errorMessage => this.errorMessage = errorMessage,
       });
   }
 }
