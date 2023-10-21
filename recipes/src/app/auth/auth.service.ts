@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {BehaviorSubject, catchError, Subject, tap, throwError} from "rxjs";
+import {BehaviorSubject, catchError, pipe, Subject, takeUntil, tap, throwError, timer} from "rxjs";
 import {UserModel} from "./user.model";
 import {Router} from "@angular/router";
 import {LocalStorageKey} from "../shared/types";
@@ -21,6 +21,7 @@ interface AuthResponse {
 @Injectable({providedIn: "root"})
 export class AuthService {
   private _user$ = new BehaviorSubject<UserModel>(null);
+  private stopLogoutTimer$ = new Subject<void>();
   user$ = this._user$.asObservable();
 
   constructor(
@@ -39,7 +40,11 @@ export class AuthService {
 
     const user = new UserModel(email, id, _token, new Date(_tokenExpirationDate));
 
-    if (user?.token) this._user$.next(user);
+    if (!user?.token) return;
+
+    this._user$.next(user);
+    const expiresIn = new Date(_tokenExpirationDate).getTime() - Date.now();
+    this.runLogoutTimer(expiresIn)
   }
 
   signUp(email: string, password: string) {
@@ -99,12 +104,21 @@ export class AuthService {
     localStorage.removeItem(LocalStorageKey.AuthUserData);
     this._user$.next(null);
     this.router.navigate(['auth']);
+    this.stopLogoutTimer$.next();
   }
 
   private handleAuthResponse(response: AuthResponse) {
     const {localId, email, idToken, expiresIn } = response;
-    const user = new UserModel(localId, email, idToken, new Date(Date.now() + parseInt(expiresIn) * 1000));
+    const expiresInNum = parseInt(expiresIn) * 1000;
+    const user = new UserModel(localId, email, idToken, new Date(Date.now() + expiresInNum));
     this._user$.next(user);
     localStorage.setItem(LocalStorageKey.AuthUserData, JSON.stringify(user));
+    this.runLogoutTimer(expiresInNum);
+  }
+
+  private runLogoutTimer(expiresIn: number) {
+    timer(expiresIn)
+      .pipe(takeUntil(this.stopLogoutTimer$))
+      .subscribe(() => this.logout());
   }
 }
