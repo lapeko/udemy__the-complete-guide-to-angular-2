@@ -9,10 +9,11 @@ import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {AppComponent} from "./app.component";
 import {AuthComponent} from "./auth/auth.component";
+import {authGuard} from "./auth/auth.guard";
 
 const routes: Route[] = [
   {path: "", redirectTo: "/recipes", pathMatch: "full"},
-  {path: "recipes", component: RecipesComponent, children: [
+  {path: "recipes", canActivate: [authGuard], component: RecipesComponent, children: [
     {path: "", component: RecipeStartComponent},
     {path: "new", component: RecipeEditComponent},
     {path: ":id", component: RecipeDetailComponent},
