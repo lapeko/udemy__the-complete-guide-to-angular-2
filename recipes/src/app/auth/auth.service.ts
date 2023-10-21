@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, catchError, Subject, tap, throwError} from "rxjs";
 import {UserModel} from "./user.model";
+import {Router} from "@angular/router";
+import {LocalStorageKey} from "../shared/types";
 
 const API_KEY = "AIzaSyD90uAwOVJ2rM1J34bBf8Cb-meL-oakDwc";
 const SIGN_UP_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
@@ -18,13 +20,17 @@ interface AuthResponse {
 
 @Injectable({providedIn: "root"})
 export class AuthService {
-  user$ = new BehaviorSubject<UserModel>(null);
+  private _user$ = new BehaviorSubject<UserModel>(null);
+  user$ = this._user$.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
   }
 
   autoSignIn() {
-    const {email, id, _token, _tokenExpirationDate} = JSON.parse(localStorage.getItem('authUserData')) as {
+    const {email, id, _token, _tokenExpirationDate} = JSON.parse(localStorage.getItem(LocalStorageKey.AuthUserData)) as {
       email: string,
       id: string,
       _token: string,
@@ -33,7 +39,7 @@ export class AuthService {
 
     const user = new UserModel(email, id, _token, new Date(_tokenExpirationDate));
 
-    if (user?.token) this.user$.next(user);
+    if (user?.token) this._user$.next(user);
   }
 
   signUp(email: string, password: string) {
@@ -89,10 +95,16 @@ export class AuthService {
     )
   }
 
+  logout() {
+    localStorage.removeItem(LocalStorageKey.AuthUserData);
+    this._user$.next(null);
+    this.router.navigate(['auth']);
+  }
+
   private handleAuthResponse(response: AuthResponse) {
     const {localId, email, idToken, expiresIn } = response;
     const user = new UserModel(localId, email, idToken, new Date(Date.now() + parseInt(expiresIn) * 1000));
-    this.user$.next(user);
-    localStorage.setItem("authUserData", JSON.stringify(user));
+    this._user$.next(user);
+    localStorage.setItem(LocalStorageKey.AuthUserData, JSON.stringify(user));
   }
 }
