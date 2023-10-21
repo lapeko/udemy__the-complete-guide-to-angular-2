@@ -30,10 +30,11 @@
     <button class="btn btn-success me-1" [disabled]="!authForm.valid">{{isLoggingIn ? "Login" : "Sign up"}}</button>
     <button class="btn btn-primary" type="button" (click)="toggleAuth()">Use {{isLoggingIn ? "Sign up" : "Login"}}</button>
   </div>
-  <div class="col-md-6" *ngIf="errorMessage">
+<!--  <div class="col-md-6" *ngIf="errorMessage">-->
 <!--    <div class="alert alert-danger">-->
 <!--      <span>{{errorMessage}}</span>-->
 <!--    </div>-->
-    <app-alert [message]="errorMessage"></app-alert>
-  </div>
+<!--  </div>-->
+  <app-alert *ngIf="errorMessage" [message]="errorMessage" (close)="handleError()"></app-alert>
+
 </form>

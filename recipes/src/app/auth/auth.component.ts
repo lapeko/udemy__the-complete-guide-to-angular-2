@@ -46,4 +46,8 @@ export class AuthComponent {
         error: errorMessage => this.errorMessage = errorMessage,
       })
   }
+
+  handleError() {
+    this.errorMessage = "";
+  }
 }
