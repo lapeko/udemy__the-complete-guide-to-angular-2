@@ -23,6 +23,19 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
+  autoSignIn() {
+    const {email, id, _token, _tokenExpirationDate} = JSON.parse(localStorage.getItem('authUserData')) as {
+      email: string,
+      id: string,
+      _token: string,
+      _tokenExpirationDate: string
+    } || {};
+
+    const user = new UserModel(email, id, _token, new Date(_tokenExpirationDate));
+
+    if (user?.token) this.user$.next(user);
+  }
+
   signUp(email: string, password: string) {
     return this.http.post<AuthResponse>(
       SIGN_UP_URL,
@@ -78,6 +91,8 @@ export class AuthService {
 
   private handleAuthResponse(response: AuthResponse) {
     const {localId, email, idToken, expiresIn } = response;
-    this.user$.next(new UserModel(localId, email, idToken, new Date(Date.now() + expiresIn)));
+    const user = new UserModel(localId, email, idToken, new Date(Date.now() + parseInt(expiresIn) * 1000));
+    this.user$.next(user);
+    localStorage.setItem("authUserData", JSON.stringify(user));
   }
 }
