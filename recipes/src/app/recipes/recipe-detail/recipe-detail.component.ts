@@ -28,7 +28,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy  {
       .pipe(
         takeUntil(this.destroy$),
         tap(({id}) => this._recipeIndex = id),
-        switchMap(({id}) => this.recipesService.recipes.pipe(
+        switchMap(({id}) => this.recipesService.recipes$.pipe(
           map(recipes => recipes[id - 1])
         ))
       ).subscribe(activeRecipe => this.activeRecipe = activeRecipe);
