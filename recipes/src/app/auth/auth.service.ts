@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {catchError, throwError} from "rxjs";
+import {catchError, Subject, tap, throwError} from "rxjs";
+import {UserModel} from "./user.model";
 
 const API_KEY = "AIzaSyD90uAwOVJ2rM1J34bBf8Cb-meL-oakDwc";
 const SIGN_UP_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
@@ -17,6 +18,7 @@ interface AuthResponse {
 
 @Injectable({providedIn: "root"})
 export class AuthService {
+  user$ = new Subject<UserModel>();
 
   constructor(private http: HttpClient) {
   }
@@ -42,7 +44,8 @@ export class AuthService {
           default:
             return throwError(() => "An unexpected error occurred. PLease, try again later");
         }
-      })
+      }),
+      tap(this.handleAuthResponse)
     )
   }
 
@@ -68,7 +71,13 @@ export class AuthService {
           default:
             return throwError(() => "An unexpected error occurred. PLease, try again later");
         }
-      })
+      }),
+      tap(this.handleAuthResponse)
     )
+  }
+
+  private handleAuthResponse(response: AuthResponse) {
+    const {localId, email, refreshToken, expiresIn } = response;
+    this.user$.next(new UserModel(localId, email, refreshToken, new Date(Date.now() + expiresIn)))
   }
 }
