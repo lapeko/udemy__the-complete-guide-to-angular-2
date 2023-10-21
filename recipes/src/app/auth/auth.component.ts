@@ -1,5 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
+import {AuthService} from "./auth.service";
 
 @Component({
   selector: 'app-auth',
@@ -11,11 +12,31 @@ export class AuthComponent {
 
   isLoggingIn = true;
 
+  constructor(private authService: AuthService) {
+  }
+
   toggleAuth() {
     this.isLoggingIn = !this.isLoggingIn;
   }
 
   onSubmit() {
-    console.log(this.form);
+    if (!this.form.valid) return;
+    const {email, password} = this.form.value;
+    if (!email?.length || !password?.length) return;
+    this.isLoggingIn ? this.signIn() : this.signUp();
+    this.form.resetForm();
+  }
+
+  private signIn() {
+    throw new Error('Not implemented');
+  }
+
+  private signUp() {
+    const {email, password} = this.form.value;
+    this.authService.signUp(email, password)
+      .subscribe({
+        next: res => console.log(res),
+        error: error => console.log('An error occurred', error),
+      });
   }
 }
