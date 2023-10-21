@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {finalize} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +16,10 @@ export class AuthComponent {
   errorMessage = "";
   isLoading = false;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {
   }
 
   toggleAuth() {
@@ -38,7 +42,7 @@ export class AuthComponent {
     observable
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: (res) => console.log(res),
+        next: () => this.router.navigate(["recipes"]),
         error: errorMessage => this.errorMessage = errorMessage,
       })
   }

@@ -22,7 +22,7 @@ export class DataStorageService {
         take(1),
         switchMap(recipes => this.http.put(CURRENT_API_URL, recipes))
       )
-      .subscribe(res => console.log(res));
+      .subscribe();
   }
 
   fetchRecipes() {

@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {catchError, Subject, tap, throwError} from "rxjs";
+import {BehaviorSubject, catchError, Subject, tap, throwError} from "rxjs";
 import {UserModel} from "./user.model";
 
 const API_KEY = "AIzaSyD90uAwOVJ2rM1J34bBf8Cb-meL-oakDwc";
@@ -18,7 +18,7 @@ interface AuthResponse {
 
 @Injectable({providedIn: "root"})
 export class AuthService {
-  user$ = new Subject<UserModel>();
+  user$ = new BehaviorSubject<UserModel>(null);
 
   constructor(private http: HttpClient) {
   }
@@ -45,7 +45,7 @@ export class AuthService {
             return throwError(() => "An unexpected error occurred. PLease, try again later");
         }
       }),
-      tap(this.handleAuthResponse)
+      tap(res => this.handleAuthResponse(res))
     )
   }
 
@@ -72,12 +72,12 @@ export class AuthService {
             return throwError(() => "An unexpected error occurred. PLease, try again later");
         }
       }),
-      tap(this.handleAuthResponse)
+      tap(res => this.handleAuthResponse(res))
     )
   }
 
   private handleAuthResponse(response: AuthResponse) {
-    const {localId, email, refreshToken, expiresIn } = response;
-    this.user$.next(new UserModel(localId, email, refreshToken, new Date(Date.now() + expiresIn)))
+    const {localId, email, idToken, expiresIn } = response;
+    this.user$.next(new UserModel(localId, email, idToken, new Date(Date.now() + expiresIn)));
   }
 }
