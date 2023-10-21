@@ -1,9 +1,11 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {RecipesService} from "../recipes/recipes.service";
-import {switchMap, take} from "rxjs";
+import {map, switchMap, take} from "rxjs";
+import {Recipe} from "./recipe.model";
 
 const API_URL = "https://ng-complete-guide-recipe-e504e-default-rtdb.europe-west1.firebasedatabase.app";
+const CURRENT_API_URL = `${API_URL}/recipes.json`;
 
 @Injectable({providedIn: "root"})
 export class DataStorageService {
@@ -18,8 +20,14 @@ export class DataStorageService {
     this.recipesService.recipes$
       .pipe(
         take(1),
-        switchMap(recipes => this.http.put(`${API_URL}/recipes.json`, recipes))
+        switchMap(recipes => this.http.put(CURRENT_API_URL, recipes))
       )
       .subscribe(res => console.log(res));
+  }
+
+  fetchRecipes() {
+    this.http.get<Recipe[]>(CURRENT_API_URL)
+      .pipe(map(recipes => recipes.map(recipe => ({...recipe, ingredients: recipe.ingredients ?? []}))))
+      .subscribe(recipes => this.recipesService.loadRecipes(recipes));
   }
 }

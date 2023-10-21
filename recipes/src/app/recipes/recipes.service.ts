@@ -7,17 +7,7 @@ import {Injectable} from "@angular/core";
   providedIn: "root",
 })
 export class RecipesService {
-  private _recipes$ = new BehaviorSubject([new Recipe(
-    "A test recipe",
-    "This is simply a test",
-    "http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcQelhbOB93YxhEP2NtOfILtkyPlRqCwt5BhRzd4daMJRAJMouaE-iU0moyh8nZ2vl3bZaECsXPeZ6HybyZM2no",
-    [new Ingredient('Meat', 2), new Ingredient("Buns", 1)]
-  ), new Recipe(
-    "A test recipe 2",
-    "This is simply a test 2",
-    "http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcQelhbOB93YxhEP2NtOfILtkyPlRqCwt5BhRzd4daMJRAJMouaE-iU0moyh8nZ2vl3bZaECsXPeZ6HybyZM2no",
-    [new Ingredient('Eggs', 3), new Ingredient("Beef", 1), new Ingredient("Bread", 1)]
-  )]);
+  private _recipes$ = new BehaviorSubject([]);
 
   get recipes$(): Observable<Recipe[]> {
     return this._recipes$.asObservable();
@@ -26,6 +16,10 @@ export class RecipesService {
   addRecipe(newRecipe: Recipe) {
     this._recipes$.next([...this._recipes$.value, newRecipe]);
     return this._recipes$.value.length;
+  }
+
+  loadRecipes(recipes: Recipe[]) {
+    this._recipes$.next(recipes);
   }
 
   deleteRecipe(index: number) {
