@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
+import {finalize} from "rxjs/operators";
 
 @Component({
   selector: 'app-auth',
@@ -11,6 +12,8 @@ export class AuthComponent {
   @ViewChild('authForm') form: NgForm;
 
   isLoggingIn = true;
+  errorMessage = "";
+  isLoading = false;
 
   constructor(private authService: AuthService) {
   }
@@ -32,11 +35,16 @@ export class AuthComponent {
   }
 
   private signUp() {
+    this.isLoading = true;
     const {email, password} = this.form.value;
     this.authService.signUp(email, password)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: res => console.log(res),
-        error: error => console.log('An error occurred', error),
+        error: error => {
+          const newErrorMessage = `Code: ${error.error.error.code}. Message: ${error.error.error.message}`;
+          this.errorMessage = newErrorMessage ?? "An error occurred"
+        },
       });
   }
 }

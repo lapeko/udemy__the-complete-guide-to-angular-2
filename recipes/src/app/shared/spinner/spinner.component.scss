@@ -1,0 +1,18 @@
+:host {
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+
+  & > div {
+    width: 10rem;
+    height: 10rem;
+    font-size: 50px;
+  }
+}
+
+

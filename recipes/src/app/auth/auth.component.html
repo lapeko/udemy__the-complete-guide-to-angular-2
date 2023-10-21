@@ -1,4 +1,5 @@
 <form class="row" #authForm="ngForm" (ngSubmit)="onSubmit()">
+  <app-spinner *ngIf="isLoading"></app-spinner>
   <div class="col-md-6">
     <div class="form-group">
       <label for="email">Email:</label>
@@ -25,8 +26,13 @@
       >
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group mb-3">
     <button class="btn btn-success me-1" [disabled]="!authForm.valid">{{isLoggingIn ? "Login" : "Sign up"}}</button>
     <button class="btn btn-primary" type="button" (click)="toggleAuth()">Use {{isLoggingIn ? "Sign up" : "Login"}}</button>
+  </div>
+  <div class="col-md-6" *ngIf="errorMessage">
+    <div class="alert alert-danger">
+      <span>{{errorMessage}}</span>
+    </div>
   </div>
 </form>
