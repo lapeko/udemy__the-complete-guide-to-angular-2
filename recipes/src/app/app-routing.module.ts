@@ -7,6 +7,8 @@ import {RecipeDetailComponent} from "./recipes/recipe-detail/recipe-detail.compo
 import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
 import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
+import {AppComponent} from "./app.component";
+import {AuthComponent} from "./auth/auth.component";
 
 const routes: Route[] = [
   {path: "", redirectTo: "/recipes", pathMatch: "full"},
@@ -18,6 +20,7 @@ const routes: Route[] = [
   ]},
   {path: "shopping-list", component: ShoppingListComponent},
   {path: "not-found", component: NotFoundComponent},
+  {path: "auth", component: AuthComponent},
   {path: "**", redirectTo: "/not-found"}
 ];
 

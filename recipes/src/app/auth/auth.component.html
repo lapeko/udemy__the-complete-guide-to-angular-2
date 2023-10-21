@@ -1,0 +1,32 @@
+<form class="row" #authForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        ngModel
+        name="email"
+        email
+        required
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        ngModel
+        name="password"
+        required
+        minlength="6"
+      >
+    </div>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-success me-1" [disabled]="!authForm.valid">{{isLoggingIn ? "Login" : "Sign up"}}</button>
+    <button class="btn btn-primary" type="button" (click)="toggleAuth()">Use {{isLoggingIn ? "Sign up" : "Login"}}</button>
+  </div>
+</form>

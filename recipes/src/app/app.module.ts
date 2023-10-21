@@ -16,6 +16,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import {HttpClientModule} from "@angular/common/http";
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {HttpClientModule} from "@angular/common/http";
     NotFoundComponent,
     RecipeEditComponent,
     RecipeStartComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,
