@@ -26,23 +26,20 @@ export class AuthComponent {
     if (!this.form.valid) return;
     const {email, password} = this.form.value;
     if (!email?.length || !password?.length) return;
-    this.isLoggingIn ? this.signIn() : this.signUp();
-    this.form.resetForm();
-  }
 
-  private signIn() {
-    throw new Error('Not implemented');
-  }
-
-  private signUp() {
     this.isLoading = true;
     this.errorMessage = "";
-    const {email, password} = this.form.value;
-    this.authService.signUp(email, password)
+    this.form.resetForm();
+
+    const observable = this.isLoggingIn
+      ? this.authService.signIn(email, password)
+      : this.authService.signUp(email, password);
+
+    observable
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: res => console.log(res),
+        next: (res) => console.log(res),
         error: errorMessage => this.errorMessage = errorMessage,
-      });
+      })
   }
 }
