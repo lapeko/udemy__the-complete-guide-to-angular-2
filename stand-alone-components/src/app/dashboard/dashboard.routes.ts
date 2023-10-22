@@ -4,6 +4,6 @@ import {TodayComponent} from "./today/today.component";
 
 export const DASHBOARD_ROUTES: Route[] = [
   {path: "", component: DashboardComponent, children: [
-      {path: "today", component: TodayComponent},
+      {path: "", component: TodayComponent},
     ]},
 ];
