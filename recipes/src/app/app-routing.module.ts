@@ -13,7 +13,6 @@ import {authGuard} from "./auth/auth.guard";
 
 const routes: Route[] = [
   {path: "", redirectTo: "/recipes", pathMatch: "full"},
-  {path: "shopping-list", component: ShoppingListComponent},
   {path: "not-found", component: NotFoundComponent},
   {path: "auth", component: AuthComponent},
   {path: "**", redirectTo: "/not-found"}
