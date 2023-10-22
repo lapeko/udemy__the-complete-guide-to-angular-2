@@ -5,8 +5,8 @@ import {Subject, take, takeUntil} from "rxjs";
 import {finalize} from "rxjs/operators";
 
 import {AuthService} from "./auth.service";
-import {AlertDirective} from "../alert/alert.directive";
-import {AlertComponent} from "../alert/alert.component";
+import {AlertDirective} from "../shared/alert/alert.directive";
+import {AlertComponent} from "../shared/alert/alert.component";
 
 @Component({
   selector: 'app-auth',

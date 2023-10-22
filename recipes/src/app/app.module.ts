@@ -6,26 +6,19 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { DropdownDirective } from './shared/dropdown.directive';
-import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthComponent } from './auth/auth.component';
-import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { AuthInterceptor } from "./auth/auth.interceptor";
-import { AlertComponent } from './alert/alert.component';
-import { AlertDirective } from "./alert/alert.directive";
 import { RecipesModule } from "./recipes/recipes.module";
 import { ShoppingListModule } from "./shopping-list/shopping-list.module";
+import { NotFoundComponent } from "./not-found/not-found.component";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    DropdownDirective,
-    NotFoundComponent,
     AuthComponent,
-    SpinnerComponent,
-    AlertComponent,
-    AlertDirective,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +27,7 @@ import { ShoppingListModule } from "./shopping-list/shopping-list.module";
     RecipesModule,
     ShoppingListModule,
     AppRoutingModule,
+    SharedModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
