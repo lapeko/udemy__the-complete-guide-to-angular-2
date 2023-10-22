@@ -20,6 +20,7 @@ import { AuthComponent } from './auth/auth.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import {AuthInterceptor} from "./auth/auth.interceptor";
 import { AlertComponent } from './alert/alert.component';
+import {AlertDirective} from "./alert/alert.directive";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AlertComponent } from './alert/alert.component';
     AuthComponent,
     SpinnerComponent,
     AlertComponent,
+    AlertDirective,
   ],
   imports: [
     BrowserModule,

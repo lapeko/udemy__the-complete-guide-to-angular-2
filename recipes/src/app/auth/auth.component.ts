@@ -1,25 +1,37 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {AuthService} from "./auth.service";
-import {finalize} from "rxjs/operators";
 import {Router} from "@angular/router";
+import {Subject, take, takeUntil} from "rxjs";
+import {finalize} from "rxjs/operators";
+
+import {AuthService} from "./auth.service";
+import {AlertDirective} from "../alert/alert.directive";
+import {AlertComponent} from "../alert/alert.component";
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent {
+export class AuthComponent implements OnDestroy {
   @ViewChild('authForm') form: NgForm;
+  @ViewChild(AlertDirective, {static: true}) alertHost: AlertDirective;
 
   isLoggingIn = true;
   errorMessage = "";
   isLoading = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleAuth() {
@@ -43,11 +55,21 @@ export class AuthComponent {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: () => this.router.navigate(["recipes"]),
-        error: errorMessage => this.errorMessage = errorMessage,
+        // error: errorMessage => this.errorMessage = errorMessage,
+        error: errorMessage => this.showAlert(errorMessage),
       })
   }
 
-  handleError() {
-    this.errorMessage = "";
+  showAlert(errorMessage: string) {
+    const viewContainerRef = this.alertHost.viewContainerRef;
+    viewContainerRef.clear();
+
+    const componentRef = viewContainerRef.createComponent<AlertComponent>(AlertComponent);
+    componentRef.instance.message = errorMessage;
+    componentRef.instance.close.pipe(
+      take(1),
+      takeUntil(this.destroy$),
+    ).subscribe(() => componentRef.destroy());
+
   }
 }
