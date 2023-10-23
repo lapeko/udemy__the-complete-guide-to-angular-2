@@ -1,5 +1,5 @@
 import {Component, OnDestroy, ViewChild} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {FormsModule, NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Subject, take, takeUntil} from "rxjs";
 import {finalize} from "rxjs/operators";
@@ -7,11 +7,17 @@ import {finalize} from "rxjs/operators";
 import {AuthService} from "./auth.service";
 import {AlertDirective} from "../shared/alert/alert.directive";
 import {AlertComponent} from "../shared/alert/alert.component";
+import {SharedModule} from "../shared/shared.module";
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  styleUrls: ['./auth.component.scss'],
+  standalone: true,
+  imports: [
+    SharedModule,
+    FormsModule
+  ]
 })
 export class AuthComponent implements OnDestroy {
   @ViewChild('authForm') form: NgForm;
