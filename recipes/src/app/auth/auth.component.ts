@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {Subject, take, takeUntil} from "rxjs";
 import {finalize} from "rxjs/operators";
 
-import {AuthService} from "./auth.service";
+import {AuthService} from "../services/auth.service";
 import {AlertDirective} from "../shared/alert/alert.directive";
 import {AlertComponent} from "../shared/alert/alert.component";
 import {SharedModule} from "../shared/shared.module";

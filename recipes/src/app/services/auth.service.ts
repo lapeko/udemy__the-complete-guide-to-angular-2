@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, catchError, pipe, Subject, takeUntil, tap, throwError, timer} from "rxjs";
-import {UserModel} from "./user.model";
+import {UserModel} from "../auth/user.model";
 import {Router} from "@angular/router";
 import {LocalStorageKey} from "../shared/types";
 
