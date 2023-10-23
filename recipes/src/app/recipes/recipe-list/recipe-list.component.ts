@@ -1,13 +1,23 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Recipe} from "../../shared/recipe.model";
-import {RecipesService} from "../recipes.service";
+import {RecipesService} from "../../services/recipes.service";
 import {Observable} from "rxjs";
-import {DataStorageService} from "../../shared/data-storage.service";
+import {DataStorageService} from "../../services/data-storage.service";
+import {RecipeItemComponent} from "./recipe-item/recipe-item.component";
+import {AsyncPipe, NgForOf} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.scss'],
+  imports: [
+    RecipeItemComponent,
+    AsyncPipe,
+    RouterLink,
+    NgForOf
+  ],
+  standalone: true
 })
 export class RecipeListComponent implements OnInit {
   recipes$: Observable<Recipe[]>;

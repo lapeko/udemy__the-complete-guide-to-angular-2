@@ -1,14 +1,23 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {NgForOf, NgIf} from "@angular/common";
 import {map, Subject, switchMap, takeUntil, tap} from "rxjs";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+
 import {Recipe} from "../../shared/recipe.model";
-import {RecipesService} from "../recipes.service";
+import {RecipesService} from "../../services/recipes.service";
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.scss'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgIf,
+    NgForOf
+  ]
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
   recipeInEdit: Recipe;

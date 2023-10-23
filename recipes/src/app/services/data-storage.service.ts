@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {RecipesService} from "../recipes/recipes.service";
+import {RecipesService} from "./recipes.service";
 import {map, switchMap, take} from "rxjs";
-import {Recipe} from "./recipe.model";
+import {Recipe} from "../shared/recipe.model";
 
 const API_URL = "https://ng-complete-guide-recipe-e504e-default-rtdb.europe-west1.firebasedatabase.app";
 const CURRENT_API_URL = `${API_URL}/recipes.json`;

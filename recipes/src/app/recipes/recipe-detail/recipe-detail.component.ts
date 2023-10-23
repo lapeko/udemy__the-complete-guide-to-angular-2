@@ -1,14 +1,24 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Recipe} from "../../shared/recipe.model";
-import {ShoppingListService} from "../../shopping-list/shopping-list.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {NgForOf, NgIf} from "@angular/common";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {map, Observable, Subject, switchMap, takeUntil, tap} from "rxjs";
-import {RecipesService} from "../recipes.service";
+
+import {Recipe} from "../../shared/recipe.model";
+import {ShoppingListService} from "../../services/shopping-list.service";
+import {RecipesService} from "../../services/recipes.service";
+import {DropdownDirective} from "../../shared/dropdown.directive";
 
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.scss']
+  styleUrls: ['./recipe-detail.component.scss'],
+  standalone: true,
+  imports: [
+    DropdownDirective,
+    RouterLink,
+    NgIf,
+    NgForOf
+  ]
 })
 export class RecipeDetailComponent implements OnInit, OnDestroy  {
   activeRecipe: Recipe;

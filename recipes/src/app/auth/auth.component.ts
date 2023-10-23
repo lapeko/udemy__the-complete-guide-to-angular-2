@@ -1,4 +1,5 @@
 import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {NgIf} from "@angular/common";
 import {FormsModule, NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Subject, take, takeUntil} from "rxjs";
@@ -7,7 +8,7 @@ import {finalize} from "rxjs/operators";
 import {AuthService} from "../services/auth.service";
 import {AlertDirective} from "../shared/alert/alert.directive";
 import {AlertComponent} from "../shared/alert/alert.component";
-import {SharedModule} from "../shared/shared.module";
+import {SpinnerComponent} from "../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-auth',
@@ -15,8 +16,10 @@ import {SharedModule} from "../shared/shared.module";
   styleUrls: ['./auth.component.scss'],
   standalone: true,
   imports: [
-    SharedModule,
-    FormsModule
+    FormsModule,
+    SpinnerComponent,
+    AlertDirective,
+    NgIf
   ]
 })
 export class AuthComponent implements OnDestroy {

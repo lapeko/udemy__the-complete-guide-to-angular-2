@@ -1,13 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Ingredient} from "../shared/ingredient.model";
-import {ShoppingListService} from "./shopping-list.service";
-import {ActivatedRoute} from "@angular/router";
+import {NgForOf} from "@angular/common";
 import {Subject, takeUntil} from "rxjs";
+
+import {ShoppingEditComponent} from "./shopping-edit/shopping-edit.component";
+import {Ingredient} from "../shared/ingredient.model";
+import {ShoppingListService} from "../services/shopping-list.service";
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.scss'],
+  standalone: true,
+  imports: [ShoppingEditComponent, NgForOf]
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();

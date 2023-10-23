@@ -9,7 +9,8 @@ import {
 const classes = ["show", "open"];
 
 @Directive({
-  selector: '[appDropdown]'
+  selector: '[appDropdown]',
+  standalone: true
 })
 export class DropdownDirective implements AfterViewInit {
   private ulElement: HTMLDivElement;
