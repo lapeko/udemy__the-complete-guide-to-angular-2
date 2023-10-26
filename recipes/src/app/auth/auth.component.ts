@@ -1,14 +1,14 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from "@angular/common";
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AsyncPipe, NgIf} from "@angular/common";
 import {FormsModule, NgForm} from "@angular/forms";
-import {Router} from "@angular/router";
-import {Subject, take, takeUntil} from "rxjs";
-import {finalize} from "rxjs/operators";
+import {filter, Subject, take, takeUntil, tap} from "rxjs";
+import {Store} from "@ngrx/store";
 
-import {AuthService} from "../services/auth.service";
 import {AlertDirective} from "../shared/alert/alert.directive";
 import {AlertComponent} from "../shared/alert/alert.component";
 import {SpinnerComponent} from "../shared/spinner/spinner.component";
+import {signIn, signUp} from "../../store/auth/auth.actions";
+import {AppState} from "../../store";
 
 @Component({
   selector: 'app-auth',
@@ -19,23 +19,28 @@ import {SpinnerComponent} from "../shared/spinner/spinner.component";
     FormsModule,
     SpinnerComponent,
     AlertDirective,
-    NgIf
+    NgIf,
+    AsyncPipe
   ]
 })
-export class AuthComponent implements OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
   @ViewChild('authForm') form: NgForm;
   @ViewChild(AlertDirective, {static: true}) alertHost: AlertDirective;
 
   isLoggingIn = true;
-  errorMessage = "";
-  isLoading = false;
+  isLoading$ = this.store.select(state => state.auth.isLoading);
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {
+  constructor(private store: Store<AppState>) {
+  }
+
+  ngOnInit() {
+    this.store.select(state => state.auth.error).pipe(
+      takeUntil(this.destroy$),
+      filter(error => !!error),
+      tap(error => this.showAlert(error))
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -52,21 +57,10 @@ export class AuthComponent implements OnDestroy {
     const {email, password} = this.form.value;
     if (!email?.length || !password?.length) return;
 
-    this.isLoading = true;
-    this.errorMessage = "";
+    const action = this.isLoggingIn ? signIn : signUp;
+    this.store.dispatch(action({payload: {email, password}}));
+
     this.form.resetForm();
-
-    const observable = this.isLoggingIn
-      ? this.authService.signIn(email, password)
-      : this.authService.signUp(email, password);
-
-    observable
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: () => this.router.navigate(["recipes"]),
-        // error: errorMessage => this.errorMessage = errorMessage,
-        error: errorMessage => this.showAlert(errorMessage),
-      })
   }
 
   showAlert(errorMessage: string) {
@@ -79,6 +73,5 @@ export class AuthComponent implements OnDestroy {
       take(1),
       takeUntil(this.destroy$),
     ).subscribe(() => componentRef.destroy());
-
   }
 }

@@ -1,38 +1,29 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject, takeUntil} from "rxjs";
+import {Component} from '@angular/core';
+import {map} from "rxjs";
 import {RouterModule} from "@angular/router";
-import {NgIf} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {Store} from "@ngrx/store";
 
 import {DataStorageService} from "../services/data-storage.service";
-import {AuthService} from "../services/auth.service";
 import {DropdownDirective} from "../shared/dropdown.directive";
+import {isAuthenticated} from "../../store/auth/auth.selectors";
+import {signOut} from "../../store/auth/auth.actions";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [RouterModule, NgIf, DropdownDirective],
+  imports: [RouterModule, NgIf, DropdownDirective, AsyncPipe],
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-  isAuthenticated = false;
-  private _destroy$ = new Subject<void>();
+export class HeaderComponent {
+  isAuthenticated$ = this.store.select(isAuthenticated);
+  isNotAuthenticated$ = this.isAuthenticated$.pipe(map(isAuthenticated => !isAuthenticated));
 
   constructor(
     private dataStorageService: DataStorageService,
-    private authService: AuthService,
+    private store: Store,
   ) {
-  }
-
-  ngOnInit(): void {
-    this.authService.user$
-      .pipe(takeUntil(this._destroy$))
-      .subscribe(user => this.isAuthenticated = !!user);
-  }
-
-  ngOnDestroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
   saveRecipes() {
@@ -44,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    this.store.dispatch(signOut());
   }
 }
 

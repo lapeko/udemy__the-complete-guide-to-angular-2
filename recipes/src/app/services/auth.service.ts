@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {BehaviorSubject, catchError, Subject, takeUntil, tap, throwError, timer} from "rxjs";
-import {UserModel} from "../auth/user.model";
-import {Router} from "@angular/router";
-import {LocalStorageKey} from "../shared/types";
+import {catchError, map, throwError} from "rxjs";
+
+import {User} from "../auth/user";
 
 const API_KEY = "AIzaSyD90uAwOVJ2rM1J34bBf8Cb-meL-oakDwc";
 const SIGN_UP_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
@@ -20,31 +19,8 @@ interface AuthResponse {
 
 @Injectable({providedIn: "root"})
 export class AuthService {
-  private _user$ = new BehaviorSubject<UserModel>(null);
-  private stopLogoutTimer$ = new Subject<void>();
-  user$ = this._user$.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {
-  }
-
-  autoSignIn() {
-    const {email, id, _token, _tokenExpirationDate} = JSON.parse(localStorage.getItem(LocalStorageKey.AuthUserData)) as {
-      email: string,
-      id: string,
-      _token: string,
-      _tokenExpirationDate: string
-    } || {};
-
-    const user = new UserModel(email, id, _token, new Date(_tokenExpirationDate));
-
-    if (!user?.token) return;
-
-    this._user$.next(user);
-    const expiresIn = new Date(_tokenExpirationDate).getTime() - Date.now();
-    this.runLogoutTimer(expiresIn)
+  constructor(private http: HttpClient) {
   }
 
   signUp(email: string, password: string) {
@@ -69,7 +45,7 @@ export class AuthService {
             return throwError(() => "An unexpected error occurred. PLease, try again later");
         }
       }),
-      tap(res => this.handleAuthResponse(res))
+      map(res => this.createUser(res))
     )
   }
 
@@ -96,29 +72,11 @@ export class AuthService {
             return throwError(() => "An unexpected error occurred. PLease, try again later");
         }
       }),
-      tap(res => this.handleAuthResponse(res))
+      map(res => this.createUser(res))
     )
   }
 
-  logout() {
-    localStorage.removeItem(LocalStorageKey.AuthUserData);
-    this._user$.next(null);
-    this.router.navigate(['auth']);
-    this.stopLogoutTimer$.next();
-  }
-
-  private handleAuthResponse(response: AuthResponse) {
-    const {localId, email, idToken, expiresIn } = response;
-    const expiresInNum = parseInt(expiresIn) * 1000;
-    const user = new UserModel(localId, email, idToken, new Date(Date.now() + expiresInNum));
-    this._user$.next(user);
-    localStorage.setItem(LocalStorageKey.AuthUserData, JSON.stringify(user));
-    this.runLogoutTimer(expiresInNum);
-  }
-
-  private runLogoutTimer(expiresIn: number) {
-    timer(expiresIn)
-      .pipe(takeUntil(this.stopLogoutTimer$))
-      .subscribe(() => this.logout());
+  private createUser(res: AuthResponse) {
+    return new User(res.localId, res.email, res.idToken, new Date(Date.now() + parseInt(res.expiresIn) * 1000));
   }
 }

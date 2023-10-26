@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "./services/auth.service";
-import {HeaderComponent} from "./header/header.component";
 import {RouterOutlet} from "@angular/router";
+import {Store} from "@ngrx/store";
+
+import {HeaderComponent} from "./header/header.component";
+import {initialSignIn} from "../store/auth/auth.actions";
 
 @Component({
   selector: 'app-root',
@@ -14,9 +16,9 @@ import {RouterOutlet} from "@angular/router";
   ]
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {
+  constructor(private store: Store) {
   }
   ngOnInit() {
-    this.authService.autoSignIn();
+    this.store.dispatch(initialSignIn());
   }
 }
