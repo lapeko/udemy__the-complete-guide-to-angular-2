@@ -1,12 +1,14 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {map, Observable, Subject, switchMap, takeUntil, tap} from "rxjs";
+import {map, Subject, switchMap, takeUntil, tap} from "rxjs";
+import {Store} from "@ngrx/store";
 
 import {Recipe} from "../../shared/recipe.model";
-import {ShoppingListService} from "../../services/shopping-list.service";
 import {RecipesService} from "../../services/recipes.service";
 import {DropdownDirective} from "../../shared/dropdown.directive";
+import {AppState} from "../../../store";
+import {addItems} from "../../../store/shopping-list/shopping-list.actions";
 
 @Component({
   selector: 'app-recipe-detail',
@@ -29,7 +31,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy  {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private recipesService: RecipesService,
-    private slService: ShoppingListService,
+    private store: Store<AppState>
   ) {
   }
 
@@ -50,7 +52,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy  {
   }
 
   addIngredientsToShoppingList() {
-    this.slService.addIngredients(...this.activeRecipe.ingredients);
+    this.store.dispatch(addItems({payload: this.activeRecipe.ingredients}));
   }
 
   deleteRecipe() {

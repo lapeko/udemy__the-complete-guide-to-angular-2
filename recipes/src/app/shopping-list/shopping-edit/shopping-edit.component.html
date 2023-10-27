@@ -1,15 +1,13 @@
 <div class="shopping-edit">
   <div class="row mb-3">
-    <form #shoppingItemForm="ngForm">
+    <form [formGroup]="form">
       <div class="col-md-4 form-group">
         <label for="name">Name</label>
         <input
           type="text"
           id="name"
           class="form-control"
-          ngModel
-          name="name"
-          required
+          formControlName="name"
         >
       </div>
       <div class="col-md-2 form-group">
@@ -18,20 +16,17 @@
           type="number"
           id="amount"
           class="form-control"
-          ngModel
-          name="amount"
-          required
-          min="1"
+          formControlName="amount"
         >
       </div>
     </form>
   </div>
   <div>
-    <button *ngIf="!idEditMode; else update" class="btn btn-success me-1" (click)="addShoppingItem()" [disabled]="!shoppingItemForm.valid">Add</button>
+    <button *ngIf="!(isEditMode$ | async); else update" class="btn btn-success me-1" (click)="addShoppingItem()" [disabled]="!form.valid">Add</button>
     <ng-template #update>
-      <button class="btn btn-primary me-1" (click)="updateShoppingItem()" [disabled]="!shoppingItemForm.valid">Update</button>
+      <button class="btn btn-primary me-1" (click)="updateShoppingItem()" [disabled]="!form.valid">Update</button>
     </ng-template>
     <button class="btn btn-warning me-1" (click)="clearShoppingItem()">Clear</button>
-    <button *ngIf="idEditMode" class="btn btn-danger" (click)="deleteShoppingItem()">Delete</button>
+    <button *ngIf="isEditMode$ | async" class="btn btn-danger" (click)="deleteShoppingItem()">Delete</button>
   </div>
 </div>

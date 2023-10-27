@@ -1,41 +1,25 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NgForOf} from "@angular/common";
-import {Subject, takeUntil} from "rxjs";
+import {Component} from '@angular/core';
+import {AsyncPipe, NgForOf} from "@angular/common";
+import {Store} from "@ngrx/store";
 
 import {ShoppingEditComponent} from "./shopping-edit/shopping-edit.component";
-import {Ingredient} from "../shared/ingredient.model";
-import {ShoppingListService} from "../services/shopping-list.service";
+import {AppState} from "../../store";
+import {setActiveItemIndex} from "../../store/shopping-list/shopping-list.actions";
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.scss'],
   standalone: true,
-  imports: [ShoppingEditComponent, NgForOf]
+  imports: [ShoppingEditComponent, NgForOf, AsyncPipe]
 })
-export class ShoppingListComponent implements OnInit, OnDestroy {
-  destroyed$ = new Subject<void>();
-  ingredients: Ingredient[] = [];
+export class ShoppingListComponent {
+  shoppingListItems$ = this.store.select(state => state.shoppingList.items);
 
-  constructor(
-    private shoppingListService: ShoppingListService,
-  ) {
-  }
-
-  ngOnInit() {
-    this.ingredients = this.shoppingListService.ingredients;
-    this.shoppingListService.shoppingListChanged.pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.ingredients = this.shoppingListService.ingredients;
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+  constructor(private store: Store<AppState>) {
   }
 
   editShoppingListItem(index: number) {
-    this.shoppingListService.editeShoppingListItem.next(index);
+    this.store.dispatch(setActiveItemIndex({payload: index}));
   }
 }

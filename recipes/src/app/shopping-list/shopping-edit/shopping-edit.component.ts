@@ -1,8 +1,12 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ShoppingListService} from "../../services/shopping-list.service";
-import {FormsModule, NgForm} from "@angular/forms";
-import {map, Subject, takeUntil, tap} from "rxjs";
-import {NgIf} from "@angular/common";
+import {Component} from '@angular/core';
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {map, of, tap} from "rxjs";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {Store} from "@ngrx/store";
+
+import {AppState} from "../../../store";
+import {addItem, deleteItem, setActiveItemIndex, updateItem} from "../../../store/shopping-list/shopping-list.actions";
+import {ShoppingListItem} from "../../shared/shopping-list-item.model";
 
 @Component({
   selector: 'app-shopping-edit',
@@ -10,57 +14,52 @@ import {NgIf} from "@angular/common";
   styleUrls: ['./shopping-edit.component.scss'],
   standalone: true,
   imports: [
-    FormsModule,
-    NgIf
+    ReactiveFormsModule,
+    NgIf,
+    AsyncPipe
   ]
 })
-export class ShoppingEditComponent implements OnInit, OnDestroy {
-  @ViewChild('shoppingItemForm') shoppingItemForm: NgForm;
-  public idEditMode = false;
-  private editedIndex = 0;
-  _destroyed$ = new Subject<void>();
+export class ShoppingEditComponent {
+  public isEditMode$ = of(false);
+  public form = this.fb.group({
+    name: this.fb.control("", Validators.required),
+    amount: this.fb.control<number>(null, [
+      Validators.required,
+      Validators.min(1),
+    ])
+  });
 
-  constructor(private shoppingListService: ShoppingListService) {}
+  constructor(
+    private store: Store<AppState>,
+    private fb: FormBuilder,
+  ) {
+    this.isEditMode$ = this.store.select(state => state.shoppingList).pipe(
+      tap(state => {
+        if (state.activeItemIndex === null) this.form.reset();
+        else this.form.setValue(state.items[state.activeItemIndex]);
+      }),
+      map(state => state.activeItemIndex !== null)
+    );
 
-  ngOnInit() {
-    this.shoppingListService.editeShoppingListItem
-      .pipe(
-        takeUntil(this._destroyed$),
-        tap((index) => {
-          this.idEditMode = true;
-          this.editedIndex = index;
-        }),
-        map(index => this.shoppingListService.ingredients[index]),
-      )
-      .subscribe(ingredient => this.shoppingItemForm.setValue(ingredient));
-  }
-
-  ngOnDestroy(): void {
-    this._destroyed$.next();
-    this._destroyed$.complete();
   }
 
   addShoppingItem() {
-    this.shoppingListService
-      .addIngredients(this.shoppingItemForm.value);
-    this.shoppingItemForm.resetForm();
+    this.store.dispatch(addItem({payload: this.form.value as ShoppingListItem}));
+    this.form.reset();
   }
 
   updateShoppingItem() {
-    this.shoppingListService
-      .updateIngredient(this.shoppingItemForm.value, this.editedIndex);
-    this.idEditMode = false;
-    this.shoppingItemForm.resetForm();
+    this.store.dispatch(updateItem({payload: this.form.value as ShoppingListItem}));
+    this.form.reset();
   }
 
   clearShoppingItem() {
-    this.idEditMode = false;
-    this.shoppingItemForm.resetForm();
+    this.store.dispatch(setActiveItemIndex({payload: null}));
+    this.form.reset();
   }
 
   deleteShoppingItem() {
-    this.shoppingListService.deleteIngredient(this.editedIndex);
-    this.idEditMode = false;
-    this.shoppingItemForm.resetForm();
+    this.store.dispatch(deleteItem());
+    this.form.reset();
   }
 }
