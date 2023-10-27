@@ -1,5 +1,5 @@
 import {Recipe} from "../shared/recipe.model";
-import {Ingredient} from "../shared/ingredient.model";
+import {ShoppingListItem} from "../shared/shopping-list-item.model";
 import {BehaviorSubject, Observable} from "rxjs";
 import {Injectable} from "@angular/core";
 
