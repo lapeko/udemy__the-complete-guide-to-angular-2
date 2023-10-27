@@ -8,6 +8,10 @@ import {AppComponent} from "./app/app.component";
 import {APP_ROUTES} from "./app/app.routes";
 import {AuthInterceptor} from "./app/auth/auth.interceptor";
 import {reducers, effects} from "./store";
+import {isDevMode} from "@angular/core";
+import {provideStoreDevtools} from "@ngrx/store-devtools";
+
+isDevMode()
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -15,6 +19,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideStore(reducers),
+    provideStoreDevtools(),
     provideEffects(effects),
 ]
 })
