@@ -3,9 +3,12 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {NgForOf, NgIf} from "@angular/common";
 import {map, Subject, switchMap, takeUntil, tap} from "rxjs";
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Store} from "@ngrx/store";
 
 import {Recipe} from "../../shared/recipe.model";
-import {RecipesService} from "../../services/recipes.service";
+import {AppState} from "../../../store";
+import {recipes} from "../../../store/recipes/recipes.selectors";
+import {addRecipe, updateRecipe} from "../../../store/recipes/recipes.actions";
 
 @Component({
   selector: 'app-recipe-edit',
@@ -26,7 +29,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private recipesService: RecipesService,
+    private store: Store<AppState>,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -42,7 +45,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         tap(({id}) => this._recipeIndex = id),
-        switchMap(({id}) => this.recipesService.recipes$.pipe(
+        switchMap(({id}) => this.store.select(recipes).pipe(
           map(recipes => recipes[id - 1])
         )),
       )
@@ -82,12 +85,10 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   createRecipe() {
-    const createdIndex = this.recipesService.addRecipe(this.recipeForm.value);
-    this.router.navigate(['..', createdIndex], {relativeTo: this.activatedRoute});
+    this.store.dispatch(addRecipe({payload: this.recipeForm.value}));
   }
 
   updateRecipe() {
-    this.recipesService.updateRecipe(this.recipeForm.value, this._recipeIndex - 1);
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.store.dispatch(updateRecipe({payload: {index: this._recipeIndex - 1, recipe: this.recipeForm.value}}));
   }
 }

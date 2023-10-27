@@ -1,34 +1,26 @@
-import {Recipe} from "../shared/recipe.model";
-import {ShoppingListItem} from "../shared/shopping-list-item.model";
-import {BehaviorSubject, Observable} from "rxjs";
 import {Injectable} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {map} from "rxjs";
 
-@Injectable({
-  providedIn: "root",
-})
+import {Recipe} from "../shared/recipe.model";
+
+const API_URL = "https://ng-complete-guide-recipe-e504e-default-rtdb.europe-west1.firebasedatabase.app";
+const CURRENT_API_URL = `${API_URL}/recipes.json`;
+
+@Injectable({providedIn: "root"})
 export class RecipesService {
-  private _recipes$ = new BehaviorSubject([]);
 
-  get recipes$(): Observable<Recipe[]> {
-    return this._recipes$.asObservable();
+  constructor(private http: HttpClient) {
   }
 
-  addRecipe(newRecipe: Recipe) {
-    this._recipes$.next([...this._recipes$.value, newRecipe]);
-    return this._recipes$.value.length;
+  storeRecipes(recipes: Recipe[]) {
+    return this.http.put(CURRENT_API_URL, recipes)
   }
 
-  loadRecipes(recipes: Recipe[]) {
-    this._recipes$.next(recipes);
-  }
-
-  deleteRecipe(index: number) {
-    this._recipes$.next(this._recipes$.value.filter((_, idx) => index !== idx));
-  }
-
-  updateRecipe(updatedRecipe: Recipe, index: number) {
-    const recipes = [...this._recipes$.value];
-    recipes[index] = updatedRecipe;
-    this._recipes$.next(recipes);
+  fetchRecipes() {
+    return this.http.get<Recipe[]>(CURRENT_API_URL)
+      .pipe(
+        map(recipes => recipes.map(recipe => ({...recipe, ingredients: recipe.ingredients ?? []}))),
+      )
   }
 }

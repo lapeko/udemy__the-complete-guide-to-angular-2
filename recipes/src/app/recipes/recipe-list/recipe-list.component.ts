@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Recipe} from "../../shared/recipe.model";
-import {RecipesService} from "../../services/recipes.service";
-import {Observable} from "rxjs";
-import {DataStorageService} from "../../services/data-storage.service";
-import {RecipeItemComponent} from "./recipe-item/recipe-item.component";
+import {Store} from "@ngrx/store";
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {RouterLink} from "@angular/router";
+
+import {RecipeItemComponent} from "./recipe-item/recipe-item.component";
+import {AppState} from "../../../store";
+import {fetchRecipes} from "../../../store/recipes/recipes.actions";
+import {recipes} from "../../../store/recipes/recipes.selectors";
 
 @Component({
   selector: 'app-recipe-list',
@@ -20,16 +21,12 @@ import {RouterLink} from "@angular/router";
   standalone: true
 })
 export class RecipeListComponent implements OnInit {
-  recipes$: Observable<Recipe[]>;
+  recipes$ = this.store.select(recipes);
 
-  constructor(
-    private recipesService: RecipesService,
-    private dataStorage: DataStorageService,
-  ) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.dataStorage.fetchRecipes();
-    this.recipes$ = this.recipesService.recipes$;
+    this.store.dispatch(fetchRecipes());
   }
 }

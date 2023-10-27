@@ -3,17 +3,17 @@ import {createReducer, on} from "@ngrx/store";
 import {ShoppingListItem} from "../../app/shared/shopping-list-item.model";
 import * as shoppingListActions from "./shopping-list.actions";
 
-export interface ShoppingListState {
+interface ShoppingListState {
   items: ShoppingListItem[];
   activeItemIndex: number | null;
 }
 
-const initialState: ShoppingListState = {
+const initialState = {
   items: [],
   activeItemIndex: null,
 };
 
-export const shoppingListReducer = createReducer(
+export const shoppingListReducer = createReducer<ShoppingListState>(
   initialState,
   on(shoppingListActions.addItems, (state, {payload}) => ({
     ...state,

@@ -3,19 +3,19 @@ import {createReducer, on} from "@ngrx/store";
 import {User} from "../../app/auth/user";
 import * as AuthActions from "./auth.actions";
 
-export interface AuthState {
+interface AuthState {
   isLoading: boolean;
   user: User | null;
   error: string;
 }
 
-const initialState: AuthState = {
+const initialState = {
   isLoading: false,
   user: null,
   error: "",
 };
 
-export const authReducer = createReducer(
+export const authReducer = createReducer<AuthState>(
   initialState,
   on(AuthActions.initialSignIn, state => ({...state, isLoading: true})),
   on(AuthActions.signIn, state => ({...state, isLoading: true, error: null})),
