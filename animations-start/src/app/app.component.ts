@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
+import {Component, OnInit} from '@angular/core';
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-root',
@@ -40,28 +40,50 @@ import {animate, keyframes, state, style, transition, trigger} from "@angular/an
       transition("shrankNormal <=> *", animate(800)),
       transition("shrankHighlighted <=> *", animate(800)),
     ]),
+    trigger("list", [
+      transition('* => void', [
+        animate(200, style({
+          opacity: 0,
+          transform: "translate(-100px)"
+        }))
+      ]),
+      transition((fromState, toState, element, params) => {
+          return fromState === "void" && params?.["initialized"];
+        },
+        [
+          style({
+            opacity: 0,
+            transform: "translate(-100px)"
+          }),
+          animate(200)
+        ],
+      ),
+    ])
   ]
 })
 export class AppComponent {
   animationState: "normal" | "highlighted" = "normal";
   shrinkState = "normal";
   list = ['Milk', 'Sugar', 'Bread'];
+  initialized = false;
 
   onAdd(item: string) {
     this.list.push(item);
   }
 
-  onDelete(item: string) {
-    console.log('Not implemented');
+  ngOnInit() {
+    setTimeout(() => this.initialized = true);
+  }
+
+  onDelete(itemDelete: string) {
+    this.list = this.list.filter(item => item !== itemDelete);
   }
 
   animate() {
     this.shrinkState = this.animationState = this.animationState === 'normal' ? 'highlighted' : 'normal'
-    console.log(this.shrinkState);
   }
 
   shrink() {
     this.shrinkState = `shrank${this.animationState.charAt(0).toUpperCase() + this.animationState.slice(1)}`;
-    console.log(this.shrinkState);
   }
 }
