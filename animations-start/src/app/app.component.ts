@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-root',
@@ -20,25 +20,30 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
     ]),
     trigger("wildState", [
       state("normal", style({
-        transform: "translateX(0) scale(1)",
         backgroundColor: "red",
+        transform: "translateX(0) scale(1)",
       })),
       state("highlighted", style({
-        transform: "translateX(100px) scale(1)",
         backgroundColor: "blue",
+        transform: "translateX(100px) scale(1)",
       })),
-      state("shrank", style({
+      state("shrankNormal", style({
+        backgroundColor: "yellow",
         transform: "translateX(0) scale(.5)",
-        backgroundColor: "green",
       })),
-      transition("normal => highlighted", [animate('400ms ease-out')]),
-      transition("highlighted => normal", [animate('800ms ease-out')]),
-      transition("shrank <=> *", [animate('800ms ease-out')]),
+      state("shrankHighlighted", style({
+        backgroundColor: "purple",
+        transform: "translateX(100px) scale(.5)",
+      })),
+      transition("normal <=> highlighted", animate(300)),
+      transition("highlighted <=> normal", animate(800)),
+      transition("shrankNormal <=> *", animate(800)),
+      transition("shrankHighlighted <=> *", animate(800)),
     ]),
   ]
 })
 export class AppComponent {
-  animationState = "normal";
+  animationState: "normal" | "highlighted" = "normal";
   shrinkState = "normal";
   list = ['Milk', 'Sugar', 'Bread'];
 
@@ -52,9 +57,11 @@ export class AppComponent {
 
   animate() {
     this.shrinkState = this.animationState = this.animationState === 'normal' ? 'highlighted' : 'normal'
+    console.log(this.shrinkState);
   }
 
   shrink() {
-    this.shrinkState = "shrank";
+    this.shrinkState = `shrank${this.animationState.charAt(0).toUpperCase() + this.animationState.slice(1)}`;
+    console.log(this.shrinkState);
   }
 }
