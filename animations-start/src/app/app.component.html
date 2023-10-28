@@ -2,10 +2,20 @@
   <div class="row">
     <div class="col-xs-12">
       <h1>Animations</h1>
-      <button class="btn btn-primary">Animate!</button>
-      <button class="btn btn-primary">Shrink!</button>
+      <button class="btn btn-primary" (click)="animate()">
+        Animate!
+      </button>
+      <button class="btn btn-primary" (click)="shrink()">Shrink!</button>
       <hr>
-      <div></div>
+      <div
+        style="width: 100px; height: 100px"
+        [@divState]="animationState"
+      ></div>
+      <hr>
+      <div
+        style="width: 100px; height: 100px"
+        [@wildState]="shrinkState"
+      ></div>
     </div>
   </div>
   <hr>
