@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {animate, group, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-root',
@@ -42,10 +42,19 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
     ]),
     trigger("list", [
       transition('* => void', [
-        animate(200, style({
-          opacity: 0,
-          transform: "translate(-100px)"
-        }))
+        group([
+          animate(1000, keyframes([
+            style({color: "red", offset: .5}),
+            style({color: "blue", offset: .75}),
+            style({color: "white", offset: 1}),
+          ])),
+          animate(2000, keyframes([
+            style({transform: "translateX(-100px)", offset: 0.25}),
+            style({transform: "translate(-100px, 100px)", offset: 0.375}),
+            style({transform: "translate(-100px, 100px)", offset: 0.5}),
+            style({transform: "translate(-100px, -2500px)", offset: 1}),
+          ])),
+        ])
       ]),
       transition((fromState, toState, element, params) => {
           return fromState === "void" && params?.["initialized"];
