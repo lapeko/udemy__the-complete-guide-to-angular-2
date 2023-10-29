@@ -29,7 +29,9 @@
           class="list-group-item"
           (click)="onDelete(item)"
           *ngFor="let item of list"
-          [@list]="{value: '', params: {initialized}}"
+          [@list]="{value: null, params: {initialized}}"
+          (@list.start)="animationStarted($event)"
+          (@list.done)="animationDone($event)"
         >
           {{ item }}
         </li>

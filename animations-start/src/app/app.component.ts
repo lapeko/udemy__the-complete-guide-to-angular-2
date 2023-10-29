@@ -41,6 +41,10 @@ import {animate, group, keyframes, state, style, transition, trigger} from "@ang
       transition("shrankHighlighted <=> *", animate(800)),
     ]),
     trigger("list", [
+      state("in", style({
+        opacity: 1,
+        transform: "translate(0,0)"
+      })),
       transition('* => void', [
         group([
           animate(1000, keyframes([
@@ -94,5 +98,13 @@ export class AppComponent {
 
   shrink() {
     this.shrinkState = `shrank${this.animationState.charAt(0).toUpperCase() + this.animationState.slice(1)}`;
+  }
+
+  animationStarted($event: any) {
+    console.log("animation started:", $event);
+  }
+
+  animationDone($event: any) {
+    console.log("animation done:", $event);
   }
 }
