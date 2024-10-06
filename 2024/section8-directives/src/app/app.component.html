@@ -1,0 +1,7 @@
+<div class="container pt-4">
+  <div *appPermission="['user', 'admin']">Hi, {{authService.role()}}</div>
+  <button
+    class="btn btn-success"
+    (click)="authService.login('user')"
+  >Login</button>
+</div>
